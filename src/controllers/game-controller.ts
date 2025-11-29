@@ -4,9 +4,8 @@ import status from 'http-status';
 import { gamesTable } from '../db/schema';
 import { db } from '../db/connection';
 import { parseParamId } from '../utils/parse-param-id';
-import { gameSchema } from '../validators/game-schema';
 import type { Game } from '../types/game';
-import { API_BASE } from '../constants';
+import { API_BASE, GAME_NOT_FOUND } from '../constants';
 
 export default class GameController {
     async getGames(request: Request, response: Response) {
@@ -36,20 +35,11 @@ export default class GameController {
         } else {
             response
                 .status(status.NOT_FOUND)
-                .send('Game not found');
+                .send(GAME_NOT_FOUND);
         }
     }
 
     async addGame(request: Request, response: Response) {
-        const { error } = gameSchema.validate(request.body);
-
-        if (error) {
-            response
-                .status(status.BAD_REQUEST)
-                .send({ error: error.details });
-            return false;
-        }
-
         const game: Game = request.body;
 
         const [newGame] = await db
@@ -65,15 +55,6 @@ export default class GameController {
     }
 
     async updateGame(request: Request, response: Response) {
-        const { error } = gameSchema.validate(request.body);
-
-        if (error) {
-            response
-                .status(status.BAD_REQUEST)
-                .send({ error: error.details });
-            return false;
-        }
-
         const id = parseParamId(request.params.id);
         const [game] = await db
             .select()
@@ -92,7 +73,7 @@ export default class GameController {
         } else {
             response
                 .status(status.NOT_FOUND)
-                .send('Game not found');
+                .send(GAME_NOT_FOUND);
         }
     }
 
@@ -106,7 +87,7 @@ export default class GameController {
         if (result.rowsAffected === 0) {
             return response
                 .status(status.NOT_FOUND)
-                .send('Game not found');
+                .send(GAME_NOT_FOUND);
         }
 
         response

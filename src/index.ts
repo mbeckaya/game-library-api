@@ -2,6 +2,7 @@ import express from 'express';
 import 'dotenv/config';
 import GameController from './controllers/game-controller';
 import { API_BASE, PORT } from './constants';
+import { validateGameBody } from './middlewares/game-middleware';
 
 const app = express();
 
@@ -13,9 +14,9 @@ app.get(`${API_BASE}/games`, gameController.getGames);
 
 app.get(`${API_BASE}/games/:id`, gameController.getGame);
 
-app.post(`${API_BASE}/games/`, gameController.addGame);
+app.post(`${API_BASE}/games/`, validateGameBody, gameController.addGame);
 
-app.put(`${API_BASE}/games/:id`, gameController.updateGame);
+app.put(`${API_BASE}/games/:id`, validateGameBody, gameController.updateGame);
 
 app.delete(`${API_BASE}/games/:id`, gameController.deleteGame);
 
