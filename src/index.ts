@@ -4,9 +4,9 @@ import GameController from './controllers/game-controller';
 import { API_BASE, PORT } from './constants';
 import { validateGameBody } from './middlewares/game-middleware';
 
-const app = express();
-
 const gameController = new GameController();
+
+const app = express();
 
 app.use(express.json());
 

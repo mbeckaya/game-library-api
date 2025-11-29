@@ -80,15 +80,9 @@ export default class GameController {
     async deleteGame(request: Request, response: Response) {
         const id = parseParamId(request.params.id);
 
-        const result = await db
+        await db
             .delete(gamesTable)
             .where(eq(gamesTable.id, id));
-
-        if (result.rowsAffected === 0) {
-            return response
-                .status(status.NOT_FOUND)
-                .send(GAME_NOT_FOUND);
-        }
 
         response
             .status(status.OK)
