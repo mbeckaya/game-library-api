@@ -6,7 +6,7 @@ import { validateGameBody } from './middlewares/game-middleware';
 
 const gameController = new GameController();
 
-const app = express();
+export const app = express();
 
 app.use(express.json());
 
@@ -14,7 +14,7 @@ app.get(`${API_BASE}/games`, gameController.getGames);
 
 app.get(`${API_BASE}/games/:id`, gameController.getGame);
 
-app.post(`${API_BASE}/games/`, validateGameBody, gameController.addGame);
+app.post(`${API_BASE}/games`, validateGameBody, gameController.addGame);
 
 app.put(`${API_BASE}/games/:id`, validateGameBody, gameController.updateGame);
 

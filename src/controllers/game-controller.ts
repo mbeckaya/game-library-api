@@ -46,7 +46,8 @@ export default class GameController {
             .insert(gamesTable)
             .values(game);
 
-        game.href = `${API_BASE}/games/${newGame.insertId}`;
+        game.id = newGame.insertId;
+        game.href = `${API_BASE}/games/${game.id}`;
 
         response
             .status(status.CREATED)
@@ -56,6 +57,8 @@ export default class GameController {
 
     async updateGame(request: Request, response: Response) {
         const id = parseParamId(request.params.id);
+        const body: Game = request.body;
+
         const [game] = await db
             .select()
             .from(gamesTable)
@@ -64,12 +67,14 @@ export default class GameController {
         if (game) {
             await db
                 .update(gamesTable)
-                .set(request.body)
+                .set(body)
                 .where(eq(gamesTable.id, id));
+
+            if (!body.id) body.id = id;
 
             response
                 .status(status.OK)
-                .send();
+                .send(body);
         } else {
             response
                 .status(status.NOT_FOUND)
@@ -84,8 +89,6 @@ export default class GameController {
             .delete(gamesTable)
             .where(eq(gamesTable.id, id));
 
-        response
-            .status(status.OK)
-            .send();
+        response.sendStatus(status.NO_CONTENT);
     }
 }
