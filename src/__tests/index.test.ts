@@ -92,4 +92,10 @@ describe('Game Routes', () => {
         expect(response.status).toBe(status.NO_CONTENT);
         expect(response.body).toEqual({});
     });
+
+    it('GET / => 404', async () => {
+        const response = await request(app).delete('/');
+
+        expect(response.status).toBe(status.NOT_FOUND);
+    });
 });
