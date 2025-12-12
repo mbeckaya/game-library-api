@@ -1,4 +1,4 @@
-# game-library-api
+# expressjs-game-manager-api
 
 > **Note:** This README was generated with the assistance of AI for documentation purposes.
 
